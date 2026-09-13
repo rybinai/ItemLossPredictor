@@ -37,6 +37,14 @@ docker compose exec app python -m app.features_loader artifacts/item_features.cs
 
 ## Тесты
 
+Тесты выполняются локально, для этого нужен Python 3.12 в своём окружении.
+
+```
+pip install -r requirements-model.txt
+```
+
+Для проверки нужен запущенный Postgres.
+
 ```
 docker compose up -d db
 pytest -v
