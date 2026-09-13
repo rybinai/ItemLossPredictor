@@ -4,6 +4,9 @@
 остальное (историческая доля возвратов, средние расходы за 30 дней) сервис сам достаёт из БД по
 `item_id`, дальше всё это идёт в готовую ML-модель.
 
+
+Стек: Python 3.12, FastAPI, SQLAlchemy, PostgreSQL, pytest, Docker.
+
 ## Переменные окружения
 
 - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` - учётные данные Postgres, использует `compose.yaml`
@@ -46,4 +49,28 @@ pytest -v
 
 ```
 ruff check .
+```
+
+## Пример
+
+Запрос `POST /predictions`:
+```json
+{
+  "request_id": "9e597dee-4253-4a30-8ec3-20a1cb10d56f",
+  "item_id": "ITEM-001",
+  "item_price": 2500.0,
+  "delivery_days": 4,
+  "client_is_app": true,
+  "type_prepayment": "card"
+}
+```
+
+Пример ответа:
+
+```json
+{
+  "request_id": "9e597dee-4253-4a30-8ec3-20a1cb10d56f",
+  "prediction": 501.34,
+  "model_version": "1.0.0"
+}
 ```
