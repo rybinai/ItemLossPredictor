@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: tutu
+          POSTGRES_PASSWORD: tutu
+          POSTGRES_DB: tutu
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tutu"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql+psycopg://tutu:tutu@localhost:5432/tutu
+      MODEL_PATH: artifacts/model.joblib
+      MODEL_METADATA_PATH: artifacts/model_metadata.json
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements-model.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Test
+        run: pytest -v
